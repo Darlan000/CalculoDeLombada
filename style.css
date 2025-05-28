@@ -1,0 +1,154 @@
+/* Estilos gerais para o corpo da página */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7f6;
+    margin: 0;
+    padding: 2em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    box-sizing: border-box;
+
+    background-image: url('img/fundo.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
+}
+
+/* Estilos para o contêiner do formulário */
+.Formulario {
+    background-color: rgba(255, 255, 255, 0.397);
+    border-radius: 1.5em;
+    box-shadow: 0 4 15px rgb(0, 0, 0);
+    text-align: left;
+    padding: 1em;
+    width: 20em;
+    height: 34em;
+    position: relative;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    margin-left: 1vw;
+
+}
+
+.logo {
+    max-width: 25em;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    width: 230px;
+    height: 60px;
+}
+
+/* Estilos para o título do formulário */
+.Formulario h1 {
+    text-align: center;
+    color: #003616;
+    margin-bottom: 25px;
+    font-size: 2em;
+}
+
+/* Estilos para as labels */
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #014c05;
+}
+
+/* Estilos para campos de seleção (dropdowns) e input de número */
+select,
+input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 1em;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 1em;
+    color: #009e42;
+}
+
+/* Estilos para o checkbox */
+input[type="checkbox"] {
+    margin-right: 1px;
+    transform: scale(1.2);
+    vertical-align: middle;
+}
+
+/* Estilos para a label do checkbox, para que fique na mesma linha */
+input[type="checkbox"] + label {
+    display: inline-block;
+    margin-bottom: 20px;
+    font-weight: normal;
+    color: #014c05;
+}
+
+/* Estilos para o botão */
+button {
+    display: block;
+    width: 80%;
+    padding: 15px 25px;
+    background-color: #22b55f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: auto;
+}
+
+button:hover {
+    background-color: #177d42; /* Cor mais escura ao passar o mouse */
+}
+
+/* Estilos para a div de aviso */
+.Aviso {
+    margin-top: 30px;
+    text-align: center;
+    font-size: 0.9em;
+    color: #777;
+    padding: 1em;
+    border: 2px dashed #ccc;
+    border-radius: 15px;
+    background-color: #fffacd;
+    max-width:center;
+}
+
+/* Estilos para o rodapé */
+footer {
+    text-align: center;
+    padding: 20px 0;
+    color: #000000;
+    font-size: 0.8em;
+    margin-top: 30px;
+}
+
+footer a {
+    color: #00ff6a;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* Estilos para telas menores (media queries) */
+@media (max-width: 480px) {
+    .Formulario {
+        padding: 20px;
+    }
+    .Formulario h1 {
+        font-size: 1.8em;
+    }
+    select, input[type="number"], button {
+        padding: 10px;
+        font-size: 1em;
+    }
+}

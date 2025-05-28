@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="img/Simbolo-verde-escuro.png">
+    <title>Imprensa da Fé</title>
+</head>
+<body>
+    <header>
+    </header>
+    <main>
+        <div class="Formulario">
+        <img src="img/IDF-Logo-verde-escuro.png" alt="Logo verde escuro da imprensa da fé" class="logo">
+        <h1>Cálculo de lombada</h1>
+        <form id="calculadoraLombadaForm"> <label for="TipoPapel">Tipo de Papel</label>
+        <select id="TipoPapel" required>
+        <option value="" disabled="" selected="">Selecione o tipo de papel</option>
+        </select>
+        <label for="TipoGramatura">Tipo de Gramatura</label>
+        <select id="TipoGramatura" required disabled> <option value="" disabled="" selected="">Selecione o tipo de Gramatura</option>
+        </select>
+        <label for="QuantidadePáginas">Quantidade de Páginas:</label>
+        <input type="number" id="QuantidadePáginas" placeholder="Ex: 100, 200..." required min="1"> <input type="checkbox" id="tipoEncadernacao"> <label for="tipoEncadernacao"><b>Cartonado</b></label>
+            <button type="submit"><b>Cálcular</b></button> </form>
+            <div id="resultadoLombada" class="resultado"></div> </div>
+        <div class="Aviso"><p>É possível que ocorram pequenas variações,<br>dependendo do lote e do fabricante do papel <br>utilizado.</p></div>
+    </main>
+    <footer>
+        <p><b>Número de contato: </b><a href="tel:+5511991267660"><b>+55 11 99126-7660</b></a></p>
+        <p><b>Visite nosso site: </b><a href="https://imprensadafe.com.br/" target="_blank" rel="noopener noreferrer"><b>imprensadafe.com.br</b></a></p>
+        <p><b>Siga-nos no Instagram: </b><a href="https://www.instagram.com/graficaimprensadafe/" target="_blank" rel="noopener noreferrer"><b>Imprensa da Fé</b></a></p>
+        <p><b>Criado por: </b><a href="https://www.instagram.com/odarlan_js/?igsh=MTY2OXYyM2kya3EzNQ%3D%3D#" target="_blank" rel="noopener noreferrer"><b>Darlan José</b></a></p>
+    </footer>
+
+    <script src="script.js"></script> 
+</body>
+</html>
