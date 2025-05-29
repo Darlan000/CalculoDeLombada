@@ -152,3 +152,56 @@ footer a:hover {
         font-size: 1em;
     }
 }
+
+.popup {
+    display: none; /* Inicialmente escondido */
+    position: fixed; /* Fica fixo na tela */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000; /* Garante que fique acima de outros elementos */
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background-color: #f4f7f6; /* Cor de fundo da página */
+    padding: 20px;
+    border-radius: 1.5em;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    position: relative;
+    width: 80%;
+    max-width: 400px; /* Largura máxima do pop-up */
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #003616; /* Cor do título */
+    cursor: pointer;
+}
+
+.popup-content h2 {
+    color: #003616; /* Cor do título */
+    margin-bottom: 15px;
+}
+
+#popupMensagem {
+    margin-top: 10px;
+    font-size: 1.1em;
+    color: #014c05; /* Cor da label */
+    font-weight: bold;
+}
+
+#popupMensagem.success {
+    color: #22b55f; /* Cor de sucesso do botão */
+}
+
+#popupMensagem.error {
+    color: #dc3545; /* Cor de erro */
+}
