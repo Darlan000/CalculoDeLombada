@@ -24,7 +24,17 @@
         <label for="QuantidadePáginas">Quantidade de Páginas:</label>
         <input type="number" id="QuantidadePáginas" placeholder="Ex: 100, 200..." required min="1"> <input type="checkbox" id="tipoEncadernacao"> <label for="tipoEncadernacao"><b>Cartonado</b></label>
             <button type="submit"><b>Cálcular</b></button> </form>
-            <div id="resultadoLombada" class="resultado"></div> </div>
+             <div id="resultadoLombada" class="resultado"></div>
+        </div>
+
+        <div id="popupResultado" class="popup">
+            <div class="popup-content">
+                <span class="close-button">&times;</span>
+                <h2>Resultado da Lombada</h2>
+                <div id="popupMensagem"></div>
+            </div>
+        </div>
+
         <div class="Aviso"><p>É possível que ocorram pequenas variações,<br>dependendo do lote e do fabricante do papel <br>utilizado.</p></div>
     </main>
     <footer>
