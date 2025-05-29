@@ -4,7 +4,12 @@ const tipoGramaturaSelect = document.getElementById('TipoGramatura');
 const quantidadePaginasInput = document.getElementById('QuantidadePáginas');
 const tipoEncadernacaoCheckbox = document.getElementById('tipoEncadernacao');
 const formulario = document.getElementById('calculadoraLombadaForm');
-const resultadoLombadaDiv = document.getElementById('resultadoLombada');
+const resultadoLombadaDiv = document.getElementById('resultadoLombada'); // Ainda podemos usar para erro de carregamento
+
+// Novos elementos do pop-up
+const popupResultado = document.getElementById('popupResultado');
+const popupMensagem = document.getElementById('popupMensagem');
+const closeButton = document.querySelector('.close-button');
 
 let dadosPapeis = []; // Variável para armazenar os dados do JSON
 
@@ -81,7 +86,9 @@ function calcularLombada(event) {
     const isCartonado = tipoEncadernacaoCheckbox.checked;
 
     if (!papelSelecionado || !gramaturaSelecionadaValor || isNaN(quantidadePaginas) || quantidadePaginas <= 0) {
-        resultadoLombadaDiv.innerHTML = '<p class="error">Por favor, preencha todos os campos e insira uma quantidade de páginas válida.</p>';
+        popupMensagem.textContent = 'Por favor, preencha todos os campos e insira uma quantidade de páginas válida.';
+        popupMensagem.className = 'error';
+        popupResultado.style.display = 'flex';
         return;
     }
 
@@ -95,7 +102,9 @@ function calcularLombada(event) {
     }
 
     if (valorBaseLombada === 0) {
-        resultadoLombadaDiv.innerHTML = '<p class="error">Não foi possível encontrar o valor base da lombada para a seleção. Verifique seus dados.</p>';
+        popupMensagem.textContent = 'Não foi possível encontrar o valor base da lombada para a seleção. Verifique seus dados.';
+        popupMensagem.className = 'error';
+        popupResultado.style.display = 'flex';
         return;
     }
 
@@ -109,7 +118,9 @@ function calcularLombada(event) {
         lombadaCalculada += 1;
     }
 
-    resultadoLombadaDiv.innerHTML = `<p class="success">A lombada calculada é: <strong>${lombadaCalculada.toFixed(1)} mm</strong></p>`;
+    popupMensagem.textContent = `A lombada calculada é: ${lombadaCalculada.toFixed(1)} mm`;
+    popupMensagem.className = 'success';
+    popupResultado.style.display = 'flex';
 }
 
 // --- 5. Adicionar os "Ouvintes de Eventos" (Event Listeners) ---
@@ -118,18 +129,30 @@ document.addEventListener('DOMContentLoaded', carregarDadosPapeis);
 
 tipoPapelSelect.addEventListener('change', () => {
     popularTipoGramatura(tipoPapelSelect.value);
-    resultadoLombadaDiv.innerHTML = ''; // Limpa o resultado
+    popupResultado.style.display = 'none'; // Esconde o pop-up ao mudar o papel
 });
 
 formulario.addEventListener('submit', calcularLombada);
 
-// Opcional: Limpar o resultado quando a gramatura, páginas ou encadernação mudam
+// Fechar o pop-up ao clicar no botão de fechar
+closeButton.addEventListener('click', () => {
+    popupResultado.style.display = 'none';
+});
+
+// Fechar o pop-up ao clicar fora dele
+window.addEventListener('click', (event) => {
+    if (event.target === popupResultado) {
+        popupResultado.style.display = 'none';
+    }
+});
+
+// Opcional: Limpar o resultado quando a gramatura, páginas ou encadernação mudam (agora só esconde o pop-up)
 tipoGramaturaSelect.addEventListener('change', () => {
-    resultadoLombadaDiv.innerHTML = '';
+    popupResultado.style.display = 'none';
 });
 quantidadePaginasInput.addEventListener('input', () => {
-    resultadoLombadaDiv.innerHTML = '';
+    popupResultado.style.display = 'none';
 });
 tipoEncadernacaoCheckbox.addEventListener('change', () => {
-    resultadoLombadaDiv.innerHTML = '';
+    popupResultado.style.display = 'none';
 });
