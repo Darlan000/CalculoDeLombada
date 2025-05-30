@@ -52,6 +52,13 @@ body {
     font-size: 2em;
 }
 
+.Formulario h2 {
+    text-align: center;
+    color: #003616;
+    margin-bottom: 25px;
+    font-size: 2em;
+}
+
 /* Estilos para as labels */
 label {
     display: block;
