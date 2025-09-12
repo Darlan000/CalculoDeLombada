@@ -23,7 +23,7 @@
     "nome": "AVENA",
     "gramaturas": [
       { "valor": "70", "valor_base_lombada": 21 },
-      { "valor": "80", "valor_base_lombada": 17.5 },
+      { "valor": "80", "valor_base_lombada": 18.5 },
       { "valor": "90", "valor_base_lombada": 16.5 }
     ]
   },
