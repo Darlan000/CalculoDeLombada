@@ -4,7 +4,7 @@ const tipoGramaturaSelect = document.getElementById('TipoGramatura');
 const quantidadePaginasInput = document.getElementById('QuantidadePáginas');
 const tipoEncadernacaoCheckbox = document.getElementById('tipoEncadernacao');
 // NOVA CONSTANTE ADICIONADA AQUI
-const tipoCapaSimplesCheckbox = document.getElementById('tipoCapaSimples'); 
+const tipoCapaFresadoCheckbox = document.getElementById('tipoCapaFresado'); 
 const formulario = document.getElementById('calculadoraLombadaForm');
 const resultadoLombadaDiv = document.getElementById('resultadoLombada'); 
 
@@ -86,7 +86,7 @@ function calcularLombada(event) {
     const quantidadePaginas = parseInt(quantidadePaginasInput.value);
     const isCartonado = tipoEncadernacaoCheckbox.checked;
     // NOVO VALOR AQUI
-    const isCapaSimples = tipoCapaSimplesCheckbox.checked; 
+    const isCapaFresado = tipoCapaFresadoCheckbox.checked; 
 
     if (!papelSelecionado || !gramaturaSelecionadaValor || isNaN(quantidadePaginas) || quantidadePaginas <= 0) {
         popupMensagem.textContent = 'Por favor, preencha todos os campos e insira uma quantidade de páginas válida.';
@@ -120,11 +120,11 @@ function calcularLombada(event) {
     if (isCartonado) {
         lombadaCalculada += 4; 
     } 
-    // 2. Se Capa Simples está marcado: Adiciona 0mm (Equivalente a subtrair 1mm do padrão de +1mm)
-    else if (isCapaSimples) {
+    // 2. Se Capa Fresado está marcado: Adiciona 0mm (Equivalente a subtrair 1mm do padrão de +1mm)
+    else if (isCapaFresado) {
         lombadaCalculada += 0; 
     } 
-    // 3. Padrão (nem Cartonado, nem Capa Simples): Adiciona 1mm
+    // 3. Padrão (nem Cartonado, nem Capa Fresado): Adiciona 1mm
     else {
         lombadaCalculada += 1; 
     }
@@ -170,6 +170,7 @@ tipoEncadernacaoCheckbox.addEventListener('change', () => {
     popupResultado.style.display = 'none';
 });
 // NOVO EVENT LISTENER AQUI
-tipoCapaSimplesCheckbox.addEventListener('change', () => {
+tipoCapaFresadoCheckbox.addEventListener('change', () => {
     popupResultado.style.display = 'none';
 });
+
