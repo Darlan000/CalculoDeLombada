@@ -26,7 +26,8 @@ body {
     text-align: left;
     padding: 1em;
     width: 20em;
-    height: 34em;
+    /* Ajustado para acomodar os dois checkboxes */
+    height: 35em; 
     position: relative;
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
@@ -75,17 +76,21 @@ input[type="number"] {
 
 /* Estilos para o checkbox */
 input[type="checkbox"] {
-    margin-right: 1px;
+    margin-right: 5px;
     transform: scale(1.2);
     vertical-align: middle;
+    /* Adicionado display inline-block para alinhar */
+    display: inline-block; 
 }
 
 /* Estilos para a label do checkbox, para que fique na mesma linha */
 input[type="checkbox"] + label {
     display: inline-block;
-    margin-bottom: 20px;
+    /* Ajustado margem para ficar na linha */
+    margin-bottom: 15px; 
     font-weight: normal;
     color: #014c05;
+    margin-right: 15px; /* Espaçamento entre os checkboxes */
 }
 
 /* Estilos para o botão */
@@ -101,7 +106,7 @@ button {
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin: auto;
+    margin: 15px auto 0; /* Ajustado margem superior para o botão */
 }
 
 button:hover {
@@ -118,7 +123,7 @@ button:hover {
     border: 2px dashed #ccc;
     border-radius: 15px;
     background-color: #fffacd;
-    max-width:center;
+    max-width: center;
 }
 
 /* Estilos para o rodapé */
@@ -143,6 +148,8 @@ footer a:hover {
 @media (max-width: 480px) {
     .Formulario {
         padding: 20px;
+        /* Reajuste de altura */
+        height: auto; 
     }
     .Formulario h1 {
         font-size: 1.8em;
