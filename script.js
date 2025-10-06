@@ -122,7 +122,7 @@ function calcularLombada(event) {
         lombadaCalculada += 4; // Cartonado: +4 mm
     } 
     else if (isCapaSimples) {
-        lombadaCalculada += 0; // Capa Simples: +0 mm (Remove o +1 padrão)
+        lombadaCalculada += 0; // Capa Simples: +0 mm (Remove o +1 padrão, cumprindo o -1)
     } 
     else {
         lombadaCalculada += 1; // Padrão: +1 mm
@@ -164,9 +164,12 @@ tipoGramaturaSelect.addEventListener('change', () => {
 quantidadePaginasInput.addEventListener('input', () => {
     popupResultado.style.display = 'none';
 });
+// ... (código existente no final do arquivo)
+
 tipoEncadernacaoCheckbox.addEventListener('change', () => {
     popupResultado.style.display = 'none';
 });
-tipoCapaSimplesCheckbox.addEventListener('change', () => { // Linha 170/171 (depende da quebra)
+// ADICIONE AQUI
+tipoCapaSimplesCheckbox.addEventListener('change', () => {
     popupResultado.style.display = 'none';
 });
