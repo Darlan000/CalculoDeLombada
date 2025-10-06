@@ -2,9 +2,9 @@
 const tipoPapelSelect = document.getElementById('TipoPapel');
 const tipoGramaturaSelect = document.getElementById('TipoGramatura');
 const quantidadePaginasInput = document.getElementById('QuantidadePáginas');
-const tipoEncadernacaoCheckbox = document.getElementById('tipoEncadernacao');
-// NOVA CONSTANTE ADICIONADA AQUI
-const tipoCapaFresadoCheckbox = document.getElementById('tipoCapaFresado'); 
+const tipoEncadernacaoCheckbox = document.getElementById('tipoEncadernacao'); // Cartonado
+const tipoCapaFresadoCheckbox = document.getElementById('tipoCapaFresado'); // Fresado
+const tipoCapaCosturadoCheckbox = document.getElementById('tipoCapaCosturado'); // NOVO: Costurado
 const formulario = document.getElementById('calculadoraLombadaForm');
 const resultadoLombadaDiv = document.getElementById('resultadoLombada'); 
 
@@ -38,7 +38,6 @@ function popularTipoPapel() {
     dadosPapeis.forEach(papel => {
         const option = document.createElement('option');
         option.value = papel.nome;
-        // Exibe o nome do papel como ele está no JSON
         option.textContent = papel.nome;
         tipoPapelSelect.appendChild(option);
     });
@@ -59,12 +58,10 @@ function popularTipoGramatura(papelSelecionado) {
         tipoGramaturaSelect.disabled = false;
         papelEncontrado.gramaturas.forEach(gramatura => {
             const option = document.createElement('option');
-            // O valor da opção será a string exata do JSON (ex: "56", "65 2.0")
             option.value = gramatura.valor;
-            // O texto visível será a gramatura, adicionando "g" se for um número, ou mantendo como está
-            if (!isNaN(parseInt(gramatura.valor))) { // Se o valor pode ser convertido para número (ex: "56")
+            if (!isNaN(parseInt(gramatura.valor))) { 
                 option.textContent = `${gramatura.valor}g`;
-            } else { // Se o valor tem texto (ex: "PAPER CREAMY 78G", "65 2.0")
+            } else { 
                 option.textContent = gramatura.valor;
             }
             tipoGramaturaSelect.appendChild(option);
@@ -84,8 +81,21 @@ function calcularLombada(event) {
     const papelSelecionado = tipoPapelSelect.value;
     const gramaturaSelecionadaValor = tipoGramaturaSelect.value;
     const quantidadePaginas = parseInt(quantidadePaginasInput.value);
+    
+    // Obter o estado de todos os checkboxes
     const isCartonado = tipoEncadernacaoCheckbox.checked;
-    const isCapaFresado = tipoCapaFresadoCheckbox.checked; 
+    const isCapaFresado = tipoCapaFresadoCheckbox.checked;
+    const isCapaCosturado = tipoCapaCosturadoCheckbox.checked; // NOVO
+
+    // ---------------------------------------------------------------------
+    // Validação para garantir que pelo menos uma encadernação foi selecionada
+    if (!isCartonado && !isCapaFresado && !isCapaCosturado) {
+        popupMensagem.textContent = 'Por favor, selecione pelo menos um tipo de encadernação (Cartonado, Fresado ou Costurado) para calcular.';
+        popupMensagem.className = 'error';
+        popupResultado.style.display = 'flex';
+        return;
+    }
+    // ---------------------------------------------------------------------
 
     if (!papelSelecionado || !gramaturaSelecionadaValor || isNaN(quantidadePaginas) || quantidadePaginas <= 0) {
         popupMensagem.textContent = 'Por favor, preencha todos os campos e insira uma quantidade de páginas válida.';
@@ -93,7 +103,7 @@ function calcularLombada(event) {
         popupResultado.style.display = 'flex';
         return;
     }
-
+    
     let valorBaseLombada = 0;
     const papel = dadosPapeis.find(p => p.nome === papelSelecionado);
     if (papel) {
@@ -112,27 +122,44 @@ function calcularLombada(event) {
 
     // Calcula o valor base da lombada (sem acréscimos)
     let lombadaCalculada = quantidadePaginas / valorBaseLombada;
-    
-    // VARIÁVEL PARA O TEXTO DINÂMICO
     let tipoEncadernacaoTexto = "";
 
-    // --- LÓGICA DE ACRÉSCIMO/DECRÉSCIMO ---
+    // --- LÓGICA DE ACRÉSCIMO/DECRÉSCIMO E TEXTO ---
     
-    // Lógica para determinar o texto
-    if (isCartonado && isCapaFresado) {
-        tipoEncadernacaoTexto = "Cartonado e Fresado";
-        lombadaCalculada += 4; // Prioriza o maior acréscimo, se ambos estiverem marcados
-    } else if (isCartonado) {
+    // 1. Prioridade para Cartonado (+4 mm)
+    if (isCartonado) {
+        lombadaCalculada += 4; 
         tipoEncadernacaoTexto = "Cartonado";
-        lombadaCalculada += 4; // Cartonado: +4 mm
-    } else if (isCapaFresado) {
+        
+        if (isCapaFresado) {
+            tipoEncadernacaoTexto += " e Fresado";
+        }
+        if (isCapaCosturado) {
+            // Se Costurado está marcado, adiciona ao texto. Cartonado prevalece no cálculo (+4).
+            // Verifica se já não adicionou o Fresado
+            if (!isCapaFresado) { 
+                 tipoEncadernacaoTexto += " e Costurado";
+            } else { 
+                 tipoEncadernacaoTexto += " e Costurado"; // Se os 3, é Cartonado, Fresado e Costurado
+            }
+        }
+    } 
+    // 2. Se não é Cartonado, verifica o Costurado (+1 mm)
+    else if (isCapaCosturado) {
+        lombadaCalculada += 1; 
+        tipoEncadernacaoTexto = "Costurado";
+        
+        if (isCapaFresado) {
+            // Se Costurado e Fresado estão marcados
+            tipoEncadernacaoTexto += " e Fresado"; 
+        }
+    } 
+    // 3. O que sobrou é apenas Fresado (+0 mm)
+    else if (isCapaFresado) {
+        lombadaCalculada += 0; 
         tipoEncadernacaoTexto = "Fresado";
-        lombadaCalculada += 0; // Fresado (ou Capa Simples): +0 mm (Remove o +1 padrão, cumprindo o -1)
-    } else {
-        tipoEncadernacaoTexto = "Costurado"; // Padrão quando não há seleção especial
-        lombadaCalculada += 1; // Padrão: +1 mm
     }
-    
+
     // ----------------------------------------
 
     // ATUALIZAÇÃO: Usa o texto dinâmico para montar a mensagem
@@ -174,9 +201,10 @@ quantidadePaginasInput.addEventListener('input', () => {
 tipoEncadernacaoCheckbox.addEventListener('change', () => {
     popupResultado.style.display = 'none';
 });
-// NOVO EVENT LISTENER AQUI
 tipoCapaFresadoCheckbox.addEventListener('change', () => {
     popupResultado.style.display = 'none';
 });
-
-
+// NOVO EVENT LISTENER: Costurado
+tipoCapaCosturadoCheckbox.addEventListener('change', () => {
+    popupResultado.style.display = 'none';
+});
