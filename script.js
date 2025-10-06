@@ -5,7 +5,11 @@ const quantidadePaginasInput = document.getElementById('QuantidadePáginas');
 const tipoEncadernacaoCheckbox = document.getElementById('tipoEncadernacao');
 const formulario = document.getElementById('calculadoraLombadaForm');
 const resultadoLombadaDiv = document.getElementById('resultadoLombada'); // Ainda podemos usar para erro de carregamento
-
+const tipoEncadernacaoCheckbox = document.getElementById('tipoEncadernacao');
+// ADICIONE AQUI
+const tipoCapaSimplesCheckbox = document.getElementById('tipoCapaSimples'); 
+const formulario = document.getElementById('calculadoraLombadaForm');
+// ...
 // Novos elementos do pop-up
 const popupResultado = document.getElementById('popupResultado');
 const popupMensagem = document.getElementById('popupMensagem');
@@ -84,6 +88,8 @@ function calcularLombada(event) {
     const gramaturaSelecionadaValor = tipoGramaturaSelect.value;
     const quantidadePaginas = parseInt(quantidadePaginasInput.value);
     const isCartonado = tipoEncadernacaoCheckbox.checked;
+    // NOVO VALOR AQUI
+    const isCapaSimples = tipoCapaSimplesCheckbox.checked; 
 
     if (!papelSelecionado || !gramaturaSelecionadaValor || isNaN(quantidadePaginas) || quantidadePaginas <= 0) {
         popupMensagem.textContent = 'Por favor, preencha todos os campos e insira uma quantidade de páginas válida.';
@@ -108,15 +114,20 @@ function calcularLombada(event) {
         return;
     }
 
-    // Calcula o valor base da lombada
+    // Calcula o valor base da lombada (sem acréscimos)
     let lombadaCalculada = quantidadePaginas / valorBaseLombada;
-
-    // Aplica o acréscimo de acordo com a encadernação
+    
+    // --- LÓGICA DE ACRÉSCIMO/DECRÉSCIMO ATUALIZADA ---
     if (isCartonado) {
-        lombadaCalculada += 4;
-    } else {
-        lombadaCalculada += 1;
+        lombadaCalculada += 4; // Cartonado: +4 mm
+    } 
+    else if (isCapaSimples) {
+        lombadaCalculada += 0; // Capa Simples: +0 mm (Remove o +1 padrão)
+    } 
+    else {
+        lombadaCalculada += 1; // Padrão: +1 mm
     }
+    // ----------------------------------------------------
 
     popupMensagem.textContent = `A lombada calculada é: ${lombadaCalculada.toFixed(1)} mm`;
     popupMensagem.className = 'success';
@@ -154,5 +165,8 @@ quantidadePaginasInput.addEventListener('input', () => {
     popupResultado.style.display = 'none';
 });
 tipoEncadernacaoCheckbox.addEventListener('change', () => {
+    popupResultado.style.display = 'none';
+});
+tipoCapaSimplesCheckbox.addEventListener('change', () => { // Linha 170/171 (depende da quebra)
     popupResultado.style.display = 'none';
 });
