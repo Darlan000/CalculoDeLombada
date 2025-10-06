@@ -3,13 +3,11 @@ const tipoPapelSelect = document.getElementById('TipoPapel');
 const tipoGramaturaSelect = document.getElementById('TipoGramatura');
 const quantidadePaginasInput = document.getElementById('QuantidadePáginas');
 const tipoEncadernacaoCheckbox = document.getElementById('tipoEncadernacao');
-const formulario = document.getElementById('calculadoraLombadaForm');
-const resultadoLombadaDiv = document.getElementById('resultadoLombada'); // Ainda podemos usar para erro de carregamento
-const tipoEncadernacaoCheckbox = document.getElementById('tipoEncadernacao');
-// ADICIONE AQUI
+// NOVA CONSTANTE ADICIONADA AQUI
 const tipoCapaSimplesCheckbox = document.getElementById('tipoCapaSimples'); 
 const formulario = document.getElementById('calculadoraLombadaForm');
-// ...
+const resultadoLombadaDiv = document.getElementById('resultadoLombada'); 
+
 // Novos elementos do pop-up
 const popupResultado = document.getElementById('popupResultado');
 const popupMensagem = document.getElementById('popupMensagem');
@@ -64,7 +62,6 @@ function popularTipoGramatura(papelSelecionado) {
             // O valor da opção será a string exata do JSON (ex: "56", "65 2.0")
             option.value = gramatura.valor;
             // O texto visível será a gramatura, adicionando "g" se for um número, ou mantendo como está
-            // Esta é a principal mudança aqui para exibir 'g'
             if (!isNaN(parseInt(gramatura.valor))) { // Se o valor pode ser convertido para número (ex: "56")
                 option.textContent = `${gramatura.valor}g`;
             } else { // Se o valor tem texto (ex: "PAPER CREAMY 78G", "65 2.0")
@@ -117,17 +114,22 @@ function calcularLombada(event) {
     // Calcula o valor base da lombada (sem acréscimos)
     let lombadaCalculada = quantidadePaginas / valorBaseLombada;
     
-    // --- LÓGICA DE ACRÉSCIMO/DECRÉSCIMO ATUALIZADA ---
+    // --- LÓGICA DE ACRÉSCIMO/DECRÉSCIMO ---
+
+    // 1. Se Cartonado está marcado: Adiciona 4mm (Maior acréscimo)
     if (isCartonado) {
-        lombadaCalculada += 4; // Cartonado: +4 mm
+        lombadaCalculada += 4; 
     } 
+    // 2. Se Capa Simples está marcado: Adiciona 0mm (Equivalente a subtrair 1mm do padrão de +1mm)
     else if (isCapaSimples) {
-        lombadaCalculada += 0; // Capa Simples: +0 mm (Remove o +1 padrão, cumprindo o -1)
+        lombadaCalculada += 0; 
     } 
+    // 3. Padrão (nem Cartonado, nem Capa Simples): Adiciona 1mm
     else {
-        lombadaCalculada += 1; // Padrão: +1 mm
+        lombadaCalculada += 1; 
     }
-    // ----------------------------------------------------
+    
+    // ----------------------------------------
 
     popupMensagem.textContent = `A lombada calculada é: ${lombadaCalculada.toFixed(1)} mm`;
     popupMensagem.className = 'success';
@@ -157,19 +159,17 @@ window.addEventListener('click', (event) => {
     }
 });
 
-// Opcional: Limpar o resultado quando a gramatura, páginas ou encadernação mudam (agora só esconde o pop-up)
+// Opcional: Esconder o pop-up quando os campos mudam
 tipoGramaturaSelect.addEventListener('change', () => {
     popupResultado.style.display = 'none';
 });
 quantidadePaginasInput.addEventListener('input', () => {
     popupResultado.style.display = 'none';
 });
-// ... (código existente no final do arquivo)
-
 tipoEncadernacaoCheckbox.addEventListener('change', () => {
     popupResultado.style.display = 'none';
 });
-// ADICIONE AQUI
+// NOVO EVENT LISTENER AQUI
 tipoCapaSimplesCheckbox.addEventListener('change', () => {
     popupResultado.style.display = 'none';
 });
