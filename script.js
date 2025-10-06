@@ -4,7 +4,7 @@ const tipoGramaturaSelect = document.getElementById('TipoGramatura');
 const quantidadePaginasInput = document.getElementById('QuantidadePáginas');
 const tipoEncadernacaoCheckbox = document.getElementById('tipoEncadernacao'); // Cartonado
 const tipoCapaFresadoCheckbox = document.getElementById('tipoCapaFresado'); // Fresado
-const tipoCapaCosturadoCheckbox = document.getElementById('tipoCapaCosturado'); // NOVO: Costurado
+const tipoCapaCosturadoCheckbox = document.getElementById('tipoCapaCosturado'); // Costurado
 const formulario = document.getElementById('calculadoraLombadaForm');
 const resultadoLombadaDiv = document.getElementById('resultadoLombada'); 
 
@@ -18,7 +18,8 @@ let dadosPapeis = []; // Variável para armazenar os dados do JSON
 // --- 1. Função para carregar os dados do JSON ---
 async function carregarDadosPapeis() {
     try {
-        const response = await fetch('PapeisGramaturas.json');
+        // Altere 'PapeisGramaturas.json' se o nome do seu arquivo JSON for diferente
+        const response = await fetch('PapeisGramaturas.json'); 
         if (!response.ok) {
             throw new Error(`Erro ao carregar os dados: ${response.statusText}`);
         }
@@ -85,10 +86,10 @@ function calcularLombada(event) {
     // Obter o estado de todos os checkboxes
     const isCartonado = tipoEncadernacaoCheckbox.checked;
     const isCapaFresado = tipoCapaFresadoCheckbox.checked;
-    const isCapaCosturado = tipoCapaCosturadoCheckbox.checked; // NOVO
+    const isCapaCosturado = tipoCapaCosturadoCheckbox.checked;
 
     // ---------------------------------------------------------------------
-    // Validação para garantir que pelo menos uma encadernação foi selecionada
+    // Validação OBRIGATÓRIA: garantir que pelo menos uma encadernação foi selecionada
     if (!isCartonado && !isCapaFresado && !isCapaCosturado) {
         popupMensagem.textContent = 'Por favor, selecione pelo menos um tipo de encadernação (Cartonado, Fresado ou Costurado) para calcular.';
         popupMensagem.className = 'error';
@@ -131,17 +132,12 @@ function calcularLombada(event) {
         lombadaCalculada += 4; 
         tipoEncadernacaoTexto = "Cartonado";
         
+        // Verifica se Fresado ou Costurado estão marcados (Lembre-se: eles são mutuamente exclusivos, se um estiver true o outro será false)
         if (isCapaFresado) {
             tipoEncadernacaoTexto += " e Fresado";
         }
         if (isCapaCosturado) {
-            // Se Costurado está marcado, adiciona ao texto. Cartonado prevalece no cálculo (+4).
-            // Verifica se já não adicionou o Fresado
-            if (!isCapaFresado) { 
-                 tipoEncadernacaoTexto += " e Costurado";
-            } else { 
-                 tipoEncadernacaoTexto += " e Costurado"; // Se os 3, é Cartonado, Fresado e Costurado
-            }
+            tipoEncadernacaoTexto += " e Costurado";
         }
     } 
     // 2. Se não é Cartonado, verifica o Costurado (+1 mm)
@@ -149,10 +145,8 @@ function calcularLombada(event) {
         lombadaCalculada += 1; 
         tipoEncadernacaoTexto = "Costurado";
         
-        if (isCapaFresado) {
-            // Se Costurado e Fresado estão marcados
-            tipoEncadernacaoTexto += " e Fresado"; 
-        }
+        // Não precisamos verificar o Fresado aqui, pois se ele estivesse marcado, o Costurado
+        // teria sido desmarcado pelo Event Listener (regra de exclusividade)
     } 
     // 3. O que sobrou é apenas Fresado (+0 mm)
     else if (isCapaFresado) {
@@ -162,7 +156,6 @@ function calcularLombada(event) {
 
     // ----------------------------------------
 
-    // ATUALIZAÇÃO: Usa o texto dinâmico para montar a mensagem
     popupMensagem.textContent = `A lombada (${tipoEncadernacaoTexto}) é: ${lombadaCalculada.toFixed(1)} mm`;
     popupMensagem.className = 'success';
     popupResultado.style.display = 'flex';
@@ -191,7 +184,7 @@ window.addEventListener('click', (event) => {
     }
 });
 
-// Opcional: Esconder o pop-up quando os campos mudam
+// Esconder o pop-up quando os campos de input/select mudam
 tipoGramaturaSelect.addEventListener('change', () => {
     popupResultado.style.display = 'none';
 });
@@ -201,10 +194,23 @@ quantidadePaginasInput.addEventListener('input', () => {
 tipoEncadernacaoCheckbox.addEventListener('change', () => {
     popupResultado.style.display = 'none';
 });
-tipoCapaFresadoCheckbox.addEventListener('change', () => {
+
+// --- 6. Lógica de Exclusividade MÚTUA (Costurado vs. Fresado) ---
+
+// Ao marcar o Costurado, desmarca o Fresado
+tipoCapaCosturadoCheckbox.addEventListener('change', () => {
+    // Se o Costurado foi marcado, e o Fresado estava marcado, desmarca o Fresado.
+    if (tipoCapaCosturadoCheckbox.checked && tipoCapaFresadoCheckbox.checked) {
+        tipoCapaFresadoCheckbox.checked = false;
+    }
     popupResultado.style.display = 'none';
 });
-// NOVO EVENT LISTENER: Costurado
-tipoCapaCosturadoCheckbox.addEventListener('change', () => {
+
+// Ao marcar o Fresado, desmarca o Costurado
+tipoCapaFresadoCheckbox.addEventListener('change', () => {
+    // Se o Fresado foi marcado, e o Costurado estava marcado, desmarca o Costurado.
+    if (tipoCapaFresadoCheckbox.checked && tipoCapaCosturadoCheckbox.checked) {
+        tipoCapaCosturadoCheckbox.checked = false;
+    }
     popupResultado.style.display = 'none';
 });
