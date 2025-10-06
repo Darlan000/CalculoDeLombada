@@ -85,7 +85,6 @@ function calcularLombada(event) {
     const gramaturaSelecionadaValor = tipoGramaturaSelect.value;
     const quantidadePaginas = parseInt(quantidadePaginasInput.value);
     const isCartonado = tipoEncadernacaoCheckbox.checked;
-    // NOVO VALOR AQUI
     const isCapaFresado = tipoCapaFresadoCheckbox.checked; 
 
     if (!papelSelecionado || !gramaturaSelecionadaValor || isNaN(quantidadePaginas) || quantidadePaginas <= 0) {
@@ -114,24 +113,30 @@ function calcularLombada(event) {
     // Calcula o valor base da lombada (sem acréscimos)
     let lombadaCalculada = quantidadePaginas / valorBaseLombada;
     
-    // --- LÓGICA DE ACRÉSCIMO/DECRÉSCIMO ---
+    // VARIÁVEL PARA O TEXTO DINÂMICO
+    let tipoEncadernacaoTexto = "";
 
-    // 1. Se Cartonado está marcado: Adiciona 4mm (Maior acréscimo)
-    if (isCartonado) {
-        lombadaCalculada += 4; 
-    } 
-    // 2. Se Capa Fresado está marcado: Adiciona 0mm (Equivalente a subtrair 1mm do padrão de +1mm)
-    else if (isCapaFresado) {
-        lombadaCalculada += 0; 
-    } 
-    // 3. Padrão (nem Cartonado, nem Capa Fresado): Adiciona 1mm
-    else {
-        lombadaCalculada += 1; 
+    // --- LÓGICA DE ACRÉSCIMO/DECRÉSCIMO ---
+    
+    // Lógica para determinar o texto
+    if (isCartonado && isCapaFresado) {
+        tipoEncadernacaoTexto = "Cartonado e Fresado";
+        lombadaCalculada += 4; // Prioriza o maior acréscimo, se ambos estiverem marcados
+    } else if (isCartonado) {
+        tipoEncadernacaoTexto = "Cartonado";
+        lombadaCalculada += 4; // Cartonado: +4 mm
+    } else if (isCapaFresado) {
+        tipoEncadernacaoTexto = "Fresado";
+        lombadaCalculada += 0; // Fresado (ou Capa Simples): +0 mm (Remove o +1 padrão, cumprindo o -1)
+    } else {
+        tipoEncadernacaoTexto = "Costurado"; // Padrão quando não há seleção especial
+        lombadaCalculada += 1; // Padrão: +1 mm
     }
     
     // ----------------------------------------
 
-    popupMensagem.textContent = `A lombada calculada é: ${lombadaCalculada.toFixed(1)} mm`;
+    // ATUALIZAÇÃO: Usa o texto dinâmico para montar a mensagem
+    popupMensagem.textContent = `A lombada (${tipoEncadernacaoTexto}) é: ${lombadaCalculada.toFixed(1)} mm`;
     popupMensagem.className = 'success';
     popupResultado.style.display = 'flex';
 }
@@ -173,4 +178,5 @@ tipoEncadernacaoCheckbox.addEventListener('change', () => {
 tipoCapaFresadoCheckbox.addEventListener('change', () => {
     popupResultado.style.display = 'none';
 });
+
 
