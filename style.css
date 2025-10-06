@@ -25,7 +25,7 @@ body {
     box-shadow: 0 4 15px rgb(0, 0, 0);
     text-align: left;
     padding: 1em;
-    width: 20em;
+    width: 25em;
     /* Ajustado para acomodar os três checkboxes */
     height: 36em; 
     position: relative;
@@ -213,3 +213,4 @@ footer a:hover {
 #popupMensagem.error {
     color: #dc3545; /* Cor de erro */
 }
+
